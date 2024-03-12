@@ -93,6 +93,7 @@ if command -v inotifywait >/dev/null 2>&1; then
         fi
     done
 else
+    echo "inotifywait not found, using polling method"
     while true; do
         for FILE_CHANGED in $(find "$MONITOR_DIR" -type f -newer "$STATE_FILE"); do
             if [ "$FILE_CHANGED" != "$LAST_FILE" ]; then
