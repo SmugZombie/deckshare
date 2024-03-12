@@ -1,4 +1,6 @@
 #!/bin/bash
+# DeckShare - Share your screenshots to Discord directly from SteamDeck
+# Enforce current directory
 CURRENT_DIR="/opt/DeckShare"
 
 # Load .env file
@@ -16,6 +18,18 @@ fi
 # Directory to monitor
 MONITOR_DIR=$(python3 /opt/DeckShare/steampy/path.py)
 echo "Monitor Directory: " $MONITOR_DIR
+
+# Check if the directory exists, if not create it
+if [ ! -d "$MONITOR_DIR" ]; then
+    echo "Monitor Directory $MONITOR_DIR does not exist, (This is typical if you haven't taken a screenshot yet) creating it..."
+    mkdir -p $MONITOR_DIR
+    if [ $? -eq 0 ]; then
+        echo "Monitor Directory created successfully: $MONITOR_DIR"
+    else
+        echo "Failed to create Monitor Directory: $MONITOR_DIR"
+        exit 1
+    fi
+fi
 
 # File to save the state
 STATE_FILE=$CURRENT_DIR"/monitor.state"
