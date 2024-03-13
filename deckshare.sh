@@ -70,26 +70,38 @@ upload_file() {
   fi
 }
 
-# Check if the state file exists and load the last processed file if available
+# State file handling
 if [ -f "$STATE_FILE" ]; then
   LAST_FILE=$(cat "$STATE_FILE")
 else
-  $(touch $STATE_FILE)
+  touch $STATE_FILE
+  if [ $? -ne 0 ]; then
+    echo "Failed to create state file $STATE_FILE"
+    exit 1
+  fi
   LAST_FILE=$(cat "$STATE_FILE")
 fi
 
-# Monitor the directory for changes
-while true; do
-  for FILE_CHANGED in $(find "$MONITOR_DIR" -type f -newer "$STATE_FILE"); do
-    # Check if the file is different from the last processed file
-    if [ "$FILE_CHANGED" != "$LAST_FILE" ]; then
-      process_file "$FILE_CHANGED"
-      # Save the current state to the state file
-      echo "$FILE_CHANGED" > "$STATE_FILE"
-      LAST_FILE="$FILE_CHANGED"
-    fi
-  done
-
-  # Sleep for a while before checking again
-  sleep 5
-done
+# Process the directory using inotifywait if it exists
+if command -v inotifywait >/dev/null 2>&1; then
+    # inotifywait exists, use it to monitor the directory
+    inotifywait -m -e create --format '%w%f' "$MONITOR_DIR" | while read FILE_CHANGED; do
+        if [ "$FILE_CHANGED" != "$LAST_FILE" ]; then
+            process_file "$FILE_CHANGED"
+            echo "$FILE_CHANGED" > "$STATE_FILE"
+            LAST_FILE="$FILE_CHANGED"
+        fi
+    done
+else
+    # echo "inotifywait not found, using polling method"
+    while true; do
+        for FILE_CHANGED in $(find "$MONITOR_DIR" -type f -newer "$STATE_FILE"); do
+            if [ "$FILE_CHANGED" != "$LAST_FILE" ]; then
+                process_file "$FILE_CHANGED"
+                echo "$FILE_CHANGED" > "$STATE_FILE"
+                LAST_FILE="$FILE_CHANGED"
+            fi
+        done
+        sleep 5
+    done
+fi

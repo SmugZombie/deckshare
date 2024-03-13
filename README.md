@@ -3,9 +3,19 @@
 Steam Screenshot sharing is a hassle, especially on the Steam Deck.
 
 *DeckShare* is a simple bash service that monitors the users Steam directory for new screenshots and automatically posts them to Discord via the provided webhook.
-(You must get your own Discord webhook url and provide it in the .env file)
+(You must get your own [Discord webhook](https://support.discord.com/hc/en-us/articles/228383668-Intro-to-Webhooks) url and provide it in the .env file)
 
 The service monitors the directory and within 5 seconds of detected changes will post the images to discord and remember what file it posted last to ensure no duplicates.
+
+<hr>
+
+*Hey! I made it easier with a scary bash script! (You are more than welcome to analyze it yourself before running, it's good I promise)*
+
+`curl -s https://github.com/smugZombie/DeckShare/install.sh | sudo bash`
+
+Otherwise read on...
+
+<hr>
 
 How to use:
 Extract this git here:
