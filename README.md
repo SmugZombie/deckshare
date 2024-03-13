@@ -11,7 +11,7 @@ The service monitors the directory and within 5 seconds of detected changes will
 
 *Hey! I made it easier with a scary bash script! (You are more than welcome to analyze it yourself before running, it's good I promise)*
 
-`curl -s https://github.com/smugZombie/DeckShare/install.sh | sudo bash`
+`curl -s https://raw.githubusercontent.com/SmugZombie/DeckShare/main/install.sh | sudo bash`
 
 Otherwise read on...
 
