@@ -56,3 +56,8 @@ Check the service status:
 Now you should be able to locate all new screenshots in your discord history and can share freely / download from here.
 
 ![image](https://github.com/SmugZombie/DeckShare/assets/11764327/00e0226f-86a0-46a8-ac1e-3fbe2b9dd814)
+
+
+# Give Thanks
+
+Like this plugin? [Buy me a beer!](https://www.paypal.com/paypalme/regli)
